@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Performance Insights Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #09090b;
+            --card: rgba(24, 24, 27, 0.6);
+            --border: rgba(63, 63, 70, 0.4);
+            --text: #fafafa;
+            --text-muted: #a1a1aa;
+            --primary: #2563eb;
+            --primary-glow: rgba(37, 99, 235, 0.4);
+            --success: #22c55e;
+            --purple: #8b5cf6;
+            --pink: #ec4899;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle animated background shapes */
+        .glow-sphere {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .glow-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation: float 20s infinite alternate;
+        }
+
+        .glow-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--purple);
+            bottom: -150px;
+            right: -100px;
+            animation: float 25s infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 60px) scale(1.1); }
+            100% { transform: translate(-20px, -40px) scale(0.9); }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            padding: 2.5rem;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            color: #60a5fa;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+        }
+
+        .portal-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .portal-card:hover {
+            border-color: rgba(37, 99, 235, 0.5);
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.15);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            text-align: left;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .feature-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 0 20px var(--primary-glow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px var(--primary-glow), inset 0 0 0 100px rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-btn:active {
+            transform: translateY(0);
+        }
+
+        .instructions-note {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 1.5rem;
+        }
+
+        .instructions-note code {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #f43f5e;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.25rem; }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 1.25rem;
+            }
+            .portal-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-sphere glow-1"></div>
+    <div class="glow-sphere glow-2"></div>
+
+    <div class="container">
+        <header class="header">
+            <span class="badge">
+                <span style="color: var(--success)">●</span> Interactive Analytics
+            </span>
+            <h1>Sales Performance Dashboard</h1>
+            <p class="subtitle">Complete analytics portal covering sales metrics, profit margins, product efficiency matrices, and natural language AI query insights.</p>
+        </header>
+
+        <main class="portal-card">
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon" style="color: var(--primary)">📊</div>
+                    <div class="feature-title">Real-Time KPIs</div>
+                    <div class="feature-desc">Monitor total sales, profit margins, average order values, and transaction counts with dynamic period comparisons.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon" style="color: var(--purple)">🎯</div>
+                    <div class="feature-title">Product Efficiency</div>
+                    <div class="feature-desc">Interactive bubble and scatter plots tracking metrics dynamically across product categories and sub-categories.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon" style="color: var(--pink)">✨</div>
+                    <div class="feature-title">Gemini AI Assistant</div>
+                    <div class="feature-desc">Query your database schema using natural language questions and instantly run generated analytical code.</div>
+                </div>
+            </div>
+
+            <!-- CTA BUTTON: REPLACE THE HREF VALUE WITH YOUR LIVE STREAMLIT CLOUD DEPLOYMENT URL -->
+            <a href="https://share.streamlit.io/" target="_blank" class="cta-btn">
+                🚀 Launch Interactive Dashboard
+            </a>
+
+            <div class="instructions-note">
+                <strong>Deployment Note:</strong> The dashboard runs as an active Python server on Streamlit Community Cloud. Click above to open the platform. Update the <code>href</code> link inside <code>index.html</code> once your app is live.
+            </div>
+        </main>
+
+        <footer class="footer">
+            &copy; 2026 Sales Data Analysis Portal. Powered by Streamlit & Vercel.
+        </footer>
+    </div>
+</body>
+</html>
