@@ -6,6 +6,15 @@ import plotly.graph_objects as go
 from datetime import datetime
 import os
 
+
+def app():
+    """Compatibility entrypoint for hosting platforms that expect an app export."""
+    return st
+
+
+application = app
+handler = app
+
 # Import helper functions
 from utils import (
     load_data, get_kpis, get_sales_trends,
@@ -539,8 +548,7 @@ with tab_products:
             )
         ))
         fig_sub.update_layout(
-            **PLOT_LAYOUT,
-            margin=dict(l=100, r=20, t=10, b=40),
+            **{**PLOT_LAYOUT, "margin": dict(l=100, r=20, t=10, b=40)},
             height=300
         )
         st.plotly_chart(fig_sub, use_container_width=True, config={"displayModeBar": False})
@@ -562,8 +570,7 @@ with tab_products:
     )
     
     fig_scat.update_layout(
-        **PLOT_LAYOUT,
-        margin=dict(l=40, r=40, t=20, b=40),
+        **{**PLOT_LAYOUT, "margin": dict(l=40, r=40, t=20, b=40)},
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         height=320
     )
